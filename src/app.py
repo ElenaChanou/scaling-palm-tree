@@ -74,6 +74,42 @@ activities = {
         "schedule": "Fridays, 3:30 PM - 5:00 PM",
         "max_participants": 12,
         "participants": ["henry@mergington.edu", "chloe@mergington.edu"]
+    },
+    "Volleyball Club": {
+        "description": "Improve serving, teamwork, and competitive volleyball play",
+        "schedule": "Mondays and Wednesdays, 4:30 PM - 5:30 PM",
+        "max_participants": 16,
+        "participants": ["grace@mergington.edu", "jack@mergington.edu"]
+    },
+    "Track & Field Club": {
+        "description": "Train for running, jumping, and relay events throughout the season",
+        "schedule": "Tuesdays and Thursdays, 3:45 PM - 5:15 PM",
+        "max_participants": 20,
+        "participants": ["zoe@mergington.edu", "owen@mergington.edu"]
+    },
+    "Ceramics Club": {
+        "description": "Explore clay sculpting, pottery techniques, and glazing methods",
+        "schedule": "Wednesdays, 3:30 PM - 5:00 PM",
+        "max_participants": 14,
+        "participants": ["lily@mergington.edu", "mason@mergington.edu"]
+    },
+    "Photography Club": {
+        "description": "Learn composition, lighting, and digital editing through creative projects",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 18,
+        "participants": ["ava@mergington.edu", "leah@mergington.edu"]
+    },
+    "Math Olympiad": {
+        "description": "Solve challenging problems and prepare for mathematics competitions",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:00 PM",
+        "max_participants": 15,
+        "participants": ["noah@mergington.edu", "ella@mergington.edu"]
+    },
+    "Science Club": {
+        "description": "Conduct experiments, explore STEM topics, and build scientific curiosity",
+        "schedule": "Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 18,
+        "participants": ["benjamin@mergington.edu", "harper@mergington.edu"]
     }
 }
 
