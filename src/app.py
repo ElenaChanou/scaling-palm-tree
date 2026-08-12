@@ -5,6 +5,8 @@ A super simple FastAPI application that allows students to view and sign up
 for extracurricular activities at Mergington High School.
 """
 
+from threading import Lock
+
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
@@ -20,6 +22,8 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
           "static")), name="static")
 
 # In-memory activity database
+activity_locks = {}
+
 activities = {
     "Chess Club": {
         "description": "Learn strategies and compete in chess tournaments",
@@ -127,20 +131,20 @@ def get_activities():
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
-    # Validate activity exists
+    normalized_email = email.strip().lower()
+
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
 
-    # Get the specific activity
     activity = activities[activity_name]
+    activity_lock = activity_locks.setdefault(activity_name, Lock())
 
-   # Validate student is not already signed up 
-    if email in activity["participants"]:
-          raise HTTPException(status_code=400, detail="Student already signed up for this activity")    
+    with activity_lock:
+        if normalized_email in [participant.lower() for participant in activity["participants"]]:
+            raise HTTPException(status_code=400, detail="Student already signed up for this activity")
 
-    # Add student
-    activity["participants"].append(email)
-    return {"message": f"Signed up {email} for {activity_name}"}
+        activity["participants"].append(normalized_email)
+        return {"message": f"Signed up {normalized_email} for {activity_name}"}
 
 
 @app.post("/activities/{activity_name}/unregister")
@@ -150,11 +154,17 @@ def unregister_participant(activity_name: str, email: str):
         raise HTTPException(status_code=404, detail="Activity not found")
 
     activity = activities[activity_name]
+    normalized_email = email.strip().lower()
+    activity_lock = activity_locks.setdefault(activity_name, Lock())
 
-    # Remove the student if present
-    try:
-        activity["participants"].remove(email)
-    except ValueError:
-        raise HTTPException(status_code=404, detail="Participant not found")
+    with activity_lock:
+        try:
+            participant_index = next(
+                index for index, participant in enumerate(activity["participants"])
+                if participant.lower() == normalized_email
+            )
+            activity["participants"].pop(participant_index)
+        except StopIteration:
+            raise HTTPException(status_code=404, detail="Participant not found")
 
-    return {"message": f"Unregistered {email} from {activity_name}"}
+    return {"message": f"Unregistered {normalized_email} from {activity_name}"}
